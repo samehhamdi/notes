@@ -12,7 +12,7 @@ class CommentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * 
+     *
      * @param Note $note
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

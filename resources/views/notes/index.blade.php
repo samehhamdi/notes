@@ -23,10 +23,14 @@
 
                             <div class="flex">
                         <li class="list-group-item">
-                            <a href="{{ url('show', [$note->slug]) }}">
-                                {{ $note->title }}
-                            </a>
-                            <span class="pull-right">{{ $note->updated_at->diffForHumans() }}</span>
+                            <div>
+                            <div>
+                                <p><a class="hover:text-laravel font-bold" href="{{ url('show', [$note->slug]) }}">{{ $note->title }}</a> -
+                                @if($note->ispublic == 1 ) Public @else Private @endif |
+                                    <span class="pull-right">{{ $note->updated_at->diffForHumans() }}</span></p>
+                            </div>
+                                <p class="card-text">{{ substr($note->body, 0,  180) }}</p>
+                            </div>
                         </li>
                             </div>
 

@@ -36,23 +36,23 @@
             <ul class="flex space-x-6 mr-6 text-lg">
                 <!-- Authentication Links -->
                 @guest
-                    @if (Route::has('login'))
-                        <li>
-                            <a href="{{ route('login') }}" class="hover:text-laravel"
-                            ><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                {{ __('Login') }}</a
-                            >
-                        </li>
-                    @endif
+                @if (Route::has('login'))
+                    <li>
+                        <a href="{{ route('login') }}" class="hover:text-laravel"
+                        ><i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            {{ __('Login') }}</a
+                        >
+                    </li>
+                @endif
 
-                    @if (Route::has('register'))
+                @if (Route::has('register'))
 
-                        <li>
-                            <a href="{{ route('register') }}" class="hover:text-laravel"
-                            ><i class="fa-solid fa-user-plus"></i> {{ __('Register') }}</a
-                            >
-                        </li>
-                    @endif
+                    <li>
+                        <a href="{{ route('register') }}" class="hover:text-laravel"
+                        ><i class="fa-solid fa-user-plus"></i> {{ __('Register') }}</a
+                        >
+                    </li>
+                @endif
                 @else
                     <li>
 
