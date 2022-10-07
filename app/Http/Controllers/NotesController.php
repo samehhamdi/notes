@@ -6,9 +6,13 @@ use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Models\Note;
 use Illuminate\Support\Str;
+use http\Exception;
 
 class NotesController extends Controller
 {
+    /**
+     * Construct
+     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -17,7 +21,8 @@ class NotesController extends Controller
     /**
      * Display a listing of all notes.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Exception
      */
     public function index()
     {
@@ -25,14 +30,17 @@ class NotesController extends Controller
             ->orwhere('ispublic',true)
             ->orderBy('updated_at', 'DESC')
             ->paginate(4);
-
+        if (!$notes) {
+            throw new \Exception("An Exception was raised please contact the Administrator !!");
+        }
         return view('notes.index', compact('notes'));
     }
 
     /**
+     *
      * Show the form for creating a new note.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -42,8 +50,8 @@ class NotesController extends Controller
     /**
      * Store a newly created note in database.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
@@ -67,8 +75,8 @@ class NotesController extends Controller
     /**
      * Show the form for editing the specified note.
      *
-     * @param  \App\Note  $note
-     * @return \Illuminate\Http\Response
+     * @param Note $note
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Note $note)
     {
@@ -78,42 +86,52 @@ class NotesController extends Controller
     /**
      * Update the specified note.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Note  $note
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Note $note
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function update(Request $request, Note $note)
     {
         $note->title = $request->title;
         $note->body = $request->body;
+        if($note->save())
+            return redirect('/')->with('message' ,'Note updated succefully ! ');
+        else
+            throw new \Exception("An Exception was raised please contact the Administrator !!");
 
-        $note->save();
-
-        return redirect('/')->with('message' ,'Note updated succefully ! ');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Note  $note
-     * @return \Illuminate\Http\Response
+     * @param Note $note
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Exception
      */
     public function show(Note $note)
     {
         $comments = Comments::getComents($note);
+        if (!$comments) {
+            throw new \Exception("An Exception was raised please contact the Administrator !!");
+        }
         return view('notes.show', ['note' =>$note ,
                                          'comments' => $comments]);
     }
+
     /**
      * Delete the specified note.
      *
-     * @param  \App\Models\Note  $note
-     * @return \Illuminate\Http\Response
+     * @param Note $note
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function destroy(Note $note)
     {
-        $note->delete();
-        return redirect('/')->with('message' ,'Note deleted succefully ! ');
+        if($note->delete())
+            return redirect('/')->with('message' ,'Note deleted succefully ! ');
+        else
+            throw new \Exception("An Exception was raised please contact the Administrator !!");
     }
 
 }
