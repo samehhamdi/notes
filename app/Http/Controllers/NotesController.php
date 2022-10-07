@@ -61,7 +61,7 @@ class NotesController extends Controller
             'ispublic'    => $ispublic
         ]);
 
-        return redirect('/')->with("Note added succefully ! ");
+        return redirect('/')->with('message' ,'Note added succefully ! ');
     }
 
     /**
@@ -89,7 +89,7 @@ class NotesController extends Controller
 
         $note->save();
 
-        return 'Saved!';
+        return redirect('/')->with('message' ,'Note updated succefully ! ');
     }
 
     /**
@@ -113,7 +113,7 @@ class NotesController extends Controller
     public function destroy(Note $note)
     {
         $note->delete();
-        return redirect('/')->with("Note deleted succefully ! ");
+        return redirect('/')->with('message' ,'Note deleted succefully ! ');
     }
 
 }
